@@ -49,6 +49,6 @@ io.on('connection', socket => {
 server.listen(PORT, async () => {
     console.log(`App listening on port ${PORT}!`);
 
-    const [name] = await pool().query('SELECT nombre from usuarios where id = 1')
-    console.log(name)
+    // const [name] = await pool().query('SELECT nombre from usuarios where id = 1')
+    // console.log(name)
 });
