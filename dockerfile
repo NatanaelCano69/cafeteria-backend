@@ -1,20 +1,12 @@
-# ---- Base Image ----
 FROM node:20-alpine
 
-# ---- App Directory ----
-WORKDIR ./
+WORKDIR /app
 
-# ---- Install Dependencies ----
-# Copy only package files first (better docker caching)
-COPY ../package*.json ./
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-RUN npm install --production
+COPY src ./src
 
-# ---- Copy App Source ----
-COPY . .
-
-# ---- Expose Port ----
 EXPOSE 8090
 
-# ---- Start Service ----
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
