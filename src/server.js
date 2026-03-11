@@ -1,4 +1,4 @@
-require('dotenv').config({path: './variables.env'});
+require('dotenv').config({path: ['./.env']});
 
 const express = require('express');
 const routes = require('./routes');
@@ -6,6 +6,9 @@ const { pool } = require('./config')
 const app = express();
 const PORT = process.env.PORT || 3001;
 const mysql = require('mysql2');
+
+console.log("ENV DEBUG:");
+console.log(process.env);
 
 console.log('db cred: ', {
     host: process.env.DB_HOST,
