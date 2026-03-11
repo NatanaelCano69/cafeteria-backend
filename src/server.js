@@ -1,8 +1,8 @@
-require('dotenv').config({path: '../.env'});
+require('dotenv').config({ path: require('path').join(__dirname, '.env') });
 
 const express = require('express');
 const routes = require('./routes');
-const {pool} = require('./config')
+const { pool } = require('./config')
 const app = express();
 const PORT = process.env.PORT || 3001;
 const mysql = require('mysql2');
@@ -17,8 +17,33 @@ console.log('db cred: ', {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// CORS for development: allow requests from Angular dev server
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+    } else {
+        res.header('Access-Control-Allow-Origin', '*');
+    }
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    if (req.method === 'OPTIONS') return res.sendStatus(200);
+    next();
+});
+
+const socket = require('./socket');
+const http = require('http');
+const server = http.createServer(app);
+
 app.use(routes);
-app.listen(PORT, async () => {
+
+const io = socket.init(server);
+
+io.on('connection', socket => {
+    console.log('Client connected');
+});
+
+server.listen(PORT, async () => {
     console.log(`App listening on port ${PORT}!`);
 
     const [name] = await pool().query('SELECT nombre from usuarios where id = 1')
