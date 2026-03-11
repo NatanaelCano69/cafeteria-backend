@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # ---- App Directory ----
-WORKDIR /src
+WORKDIR ./
 
 # ---- Install Dependencies ----
 # Copy only package files first (better docker caching)
