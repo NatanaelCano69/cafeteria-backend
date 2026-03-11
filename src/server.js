@@ -1,4 +1,6 @@
-require('dotenv').config({path: ['./.env']});
+// require('dotenv').config({path: ['./.env']});
+const dotenv = require('dotenv');
+dotenv.config()
 
 const express = require('express');
 const routes = require('./routes');
@@ -6,9 +8,6 @@ const { pool } = require('./config')
 const app = express();
 const PORT = process.env.PORT || 3001;
 const mysql = require('mysql2');
-
-console.log("ENV DEBUG:");
-console.log(process.env);
 
 console.log('db cred: ', {
     host: process.env.DB_HOST,
@@ -49,6 +48,6 @@ io.on('connection', socket => {
 server.listen(PORT, async () => {
     console.log(`App listening on port ${PORT}!`);
 
-    // const [name] = await pool().query('SELECT nombre from usuarios where id = 1')
-    // console.log(name)
+    const [name] = await pool().query('SELECT nombre from usuarios where id = 1')
+    console.log(name)
 });
