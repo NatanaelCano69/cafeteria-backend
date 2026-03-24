@@ -41,6 +41,12 @@ const io = socket.init(server);
 
 io.on('connection', socket => {
     console.log('Client connected');
+
+    socket.on('reportar_error', () => {
+        console.log('Error reportado desde consumo');
+        // Broadcast the event to all other connected clients (admin page)
+        socket.broadcast.emit('error_reportado');
+    });
 });
 
 server.listen(PORT, async () => {
